@@ -2,14 +2,19 @@
 [中文版](./README-zh.md)
  | [日本語版](./README-ja.md)
  | [한국어](./README-ko.md)
+ | [Русский](./README-ru.md)
+ | [Português](./README-pt-BR.md)
 
-[<img src="./images/hive-red-logo.png" width="180" height="180">](http://wearehive.co.uk/)
+[<img src="./images/elsewhen-logo.png" width="180" height="180">](https://www.elsewhen.com/)
 
 
 # Project Guidelines &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 > While developing a new project is like rolling on a green field for you, maintaining it is a potential dark twisted nightmare for someone else.
-Here's a list of guidelines we've found, written and gathered that (we think) works really well with most JavaScript projects here at [hive](http://wearehive.co.uk).
+Here's a list of guidelines we've found, written and gathered that (we think) works really well with most JavaScript projects here at [elsewhen](https://www.elsewhen.com).
 If you want to share a best practice, or think one of these guidelines should be removed, [feel free to share it with us](http://makeapullrequest.com).
+
+<hr>
+
 - [Git](#git)
     - [Some Git rules](#some-git-rules)
     - [Git workflow](#git-workflow)
@@ -61,7 +66,7 @@ There are a set of rules to keep in mind:
 * Delete local and remote feature branches after merging.
     
     _Why:_
-    > It will clutter up your list of branches with dead branches. It insures you only ever merge the branch back into (`master` or `develop`) once. Feature branches should only exist while the work is still in progress.
+    > It will clutter up your list of branches with dead branches. It ensures you only ever merge the branch back into (`master` or `develop`) once. Feature branches should only exist while the work is still in progress.
 
 * Before making a Pull Request, make sure your feature branch builds successfully and passes all tests (including code style checks).
     
@@ -94,11 +99,18 @@ Because of most of the reasons above, we use [Feature-branch-workflow](https://w
     ```
 * Make Changes.
     ```sh
-    git add
-    git commit -a
+    git add <file1> <file2> ...
+    git commit
     ```
     _Why:_
-    > `git commit -a` will start an editor which lets you separate the subject from the body. Read more about it in *section 1.3*.
+    > `git add <file1> <file2> ... ` - you should add only files that make up a small and coherent change.
+    
+    > `git commit` will start an editor which lets you separate the subject from the body. 
+    
+    > Read more about it in *section 1.3*.
+    
+    _Tip:_
+    > You could use `git add -p` instead, which will give you chance to review all of the introduced changes one by one, and decide whether to include them in the commit or not.
 
 * Sync with remote to get changes you’ve missed.
     ```sh
@@ -141,7 +153,7 @@ Because of most of the reasons above, we use [Feature-branch-workflow](https://w
   ```
   to remove all branches which are no longer on remote
   ```sh
-  git fetch -p && for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -D $branch; done
+  git fetch -p && for branch in `git branch -vv --no-color | grep ': gone]' | awk '{print $1}'`; do git branch -D $branch; done
   ```
 
 <a name="writing-good-commit-messages"></a>
@@ -243,7 +255,7 @@ Having a good guideline for creating commits and sticking to it makes working wi
 * Make sure your team members get the exact same dependencies as you.
 
     _Why:_
-    > Because you want the code to behave as expected and identical in any development machine [read more...](https://medium.com/@kentcdodds/why-semver-ranges-are-literally-the-worst-817cdcb09277)
+    > Because you want the code to behave as expected and identical in any development machine [read more...](https://kostasbariotis.com/consistent-dependencies-across-teams/)
 
     _how:_
     > Use `package-lock.json` on `npm@5` or higher
@@ -414,7 +426,7 @@ Having a good guideline for creating commits and sticking to it makes working wi
     _Why:_
     > Flow introduces few syntaxes that also need to follow certain code style and be checked.
 
-* Use `.eslintignore` to exclude file or folders from code style check.
+* Use `.eslintignore` to exclude files or folders from code style checks.
 
     _Why:_
     > You don't have to pollute your code with `eslint-disable` comments whenever you need to exclude a couple of files from style checking.
@@ -551,7 +563,7 @@ _Why:_
     ```
 
     _Why:_
-    > Because for CRUD we use HTTP methods on `resource` or `collection` URLs. The verbs we were talking about are actually `Controllers`. You usually don't develop many of these. [read more...](https://byrondover.github.io/post/restful-api-guidelines/#controller)
+    > Because for CRUD we use HTTP methods on `resource` or `collection` URLs. The verbs we were talking about are actually `Controllers`. You usually don't develop many of these. [read more...](https://github.com/byrondover/api-guidelines/blob/master/Guidelines.md#controller)
 
 * The request body or response type is JSON then please follow `camelCase` for `JSON` property names to maintain the consistency.
     
@@ -643,13 +655,15 @@ _Why:_
 
     _Note: Keep security exception messages as generic as possible. For instance, Instead of saying ‘incorrect password’, you can reply back saying ‘invalid username or password’ so that we don’t unknowingly inform user that username was indeed correct and only the password was incorrect._
 
-* Use only these 8 status codes to send with you response to describe whether **everything worked**,
+* Use these status codes to send with your response to describe whether **everything worked**,
 The **client app did something wrong** or The **API did something wrong**.
     
     _Which ones:_
     > `200 OK` response represents success for `GET`, `PUT` or `POST` requests.
 
     > `201 Created` for when a new instance is created. Creating a new instance, using `POST` method returns `201` status code.
+
+    > `204 No Content` response represents success but there is no content to be sent in the response. Use it when `DELETE` operation succeeds.
 
     > `304 Not Modified` response is to minimize information transfer when the recipient already has cached representations.
 
@@ -664,7 +678,7 @@ The **client app did something wrong** or The **API did something wrong**.
     > `500 Internal Server Error` indicates that the request is valid, but the server could not fulfill it due to some unexpected condition.
 
     _Why:_
-    > Most API providers use a small subset HTTP status codes. For example, the Google GData API uses only 10 status codes, Netflix uses 9, and Digg, only 8. Of course, these responses contain a body with additional information.There are over 70 HTTP status codes. However, most developers don't have all 70 memorized. So if you choose status codes that are not very common you will force application developers away from building their apps and over to wikipedia to figure out what you're trying to tell them. [read more...](https://apigee.com/about/blog/technology/restful-api-design-what-about-errors)
+    > Most API providers use a small subset HTTP status codes. For example, the Google GData API uses only 10 status codes, Netflix uses 9, and Digg, only 8. Of course, these responses contain a body with additional information. There are over 70 HTTP status codes. However, most developers don't have all 70 memorized. So if you choose status codes that are not very common you will force application developers away from building their apps and over to wikipedia to figure out what you're trying to tell them. [read more...](https://apigee.com/about/blog/technology/restful-api-design-what-about-errors)
 
 
 * Provide total numbers of resources in your response.
@@ -672,7 +686,7 @@ The **client app did something wrong** or The **API did something wrong**.
 
 * The amount of data the resource exposes should also be taken into account. The API consumer doesn't always need the full representation of a resource. Use a fields query parameter that takes a comma separated list of fields to include:
     ```
-    GET /student?fields=id,name,age,class
+    GET /students?fields=id,name,age,class
     ```
 * Pagination, filtering, and sorting don’t need to be supported from start for all resources. Document those resources that offer filtering and sorting.
 
@@ -740,7 +754,7 @@ For each endpoint explain:
 * Error Response, Most endpoints have many ways to fail. From unauthorized access to wrongful parameters etc. All of those should be listed here. It might seem repetitive, but it helps prevent assumptions from being made. For example
     ```json
     {
-        "code": 403,
+        "code": 401,
         "message" : "Authentication failed",
         "description" : "Invalid username or password"
     }   
